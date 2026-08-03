@@ -1,0 +1,318 @@
+/* ============================================================================
+   TRIBUNAL — "the docket"
+
+   Design brief: this is a court record, not a dashboard. The visual language is
+   ink on paper, legal serif for anything a human is meant to READ and reason
+   about, monospace for anything the machine measured, and exactly one accent
+   (brass) so emphasis still means something when it appears.
+
+   Rules held throughout:
+     - ONE accent colour. A second one would make neither mean anything.
+     - Serif = argument and ruling. Mono = evidence, scores, counts. The reader
+       can tell what kind of thing they are looking at without reading it.
+     - Motion only where it carries information: a card rises when its advocate
+       has actually submitted, a beam fires on a real event, the seal presses in
+       when a ruling exists. Nothing loops to look busy.
+     - Data (scores, agreement, ruling text) is never dimmed, blurred or animated
+       for decoration.
+   ========================================================================== */
+
+:root{
+  --ink:#0b0b0d;            /* near-black, slightly warm */
+  --ink-2:#121216;
+  --paper:#ece6da;          /* warm off-white for reading */
+  --paper-dim:#9d968a;
+  --rule:#26262c;           /* hairlines */
+  --brass:#c9a227;          /* the single accent */
+  --brass-dim:rgba(201,162,39,.34);
+  --ok:#7fbf9b;
+  --warn:#d9a441;
+  --bad:#c96a63;
+
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+
+  --e:cubic-bezier(.2,.7,.2,1);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ink);color:var(--paper);
+  font:15px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  max-width:1120px;margin:0 auto;padding:0 28px 90px;
+  /* faint paper tooth - texture, not gradient soup */
+  background-image:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.011) 0 1px,transparent 1px 3px);
+}
+
+/* ---------- masthead ---------- */
+header{
+  display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;
+  padding:44px 0 20px;border-bottom:1px solid var(--rule);margin-bottom:2px;
+}
+.brand{display:flex;align-items:flex-end;gap:15px}
+.mark{
+  width:44px;height:44px;flex:none;display:grid;place-items:center;
+  font-size:21px;color:var(--brass);
+  border:1px solid var(--brass-dim);border-radius:2px;
+  position:relative;
+}
+.mark::after{ /* corner ticks: a stamped document, not a glowing orb */
+  content:'';position:absolute;inset:3px;border:1px solid var(--brass-dim);opacity:.5;
+}
+h1{
+  margin:0;font:600 27px/1 var(--serif);letter-spacing:-.01em;
+}
+header p{
+  margin:7px 0 0;color:var(--paper-dim);font-size:13px;max-width:58ch;line-height:1.55;
+}
+.mode{
+  margin-left:auto;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 12px;border:1px solid var(--rule);color:var(--paper-dim);
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+}
+.mode::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.8}
+.mode.live{color:var(--ok);border-color:rgba(127,191,155,.3)}
+.mode.demo{color:var(--warn);border-color:rgba(217,164,65,.3)}
+
+/* a thin brass rule under the masthead - the only full-width flourish */
+header + *{margin-top:0}
+body::before{
+  content:'';position:fixed;left:0;right:0;top:0;height:2px;z-index:50;
+  background:linear-gradient(90deg,transparent,var(--brass),transparent);
+  opacity:.5;
+}
+
+.notice{
+  border-left:2px solid var(--warn);background:rgba(217,164,65,.06);
+  color:var(--warn);padding:11px 16px;font-size:12.5px;margin:20px 0 0;
+}
+
+/* ---------- the filing ---------- */
+.ask{
+  display:grid;gap:0;margin:26px 0 30px;
+  border:1px solid var(--rule);
+}
+.ask-row{position:relative}
+.ask input{
+  width:100%;background:transparent;color:var(--paper);border:0;
+  border-bottom:1px solid var(--rule);
+  padding:15px 18px;font:15px/1.5 var(--sans);
+}
+.ask input::placeholder{color:#5d5a55}
+.ask input:focus{outline:0;background:rgba(201,162,39,.03)}
+#question{font:400 17px/1.5 var(--serif)}
+.hits{
+  position:absolute;z-index:9;left:0;right:0;top:100%;
+  background:var(--ink-2);border:1px solid var(--rule);border-top:0;
+  max-height:264px;overflow-y:auto;
+  animation:drop .18s var(--e);
+}
+@keyframes drop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.hit{padding:10px 18px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--rule);transition:background .12s}
+.hit:last-child{border-bottom:0}
+.hit:hover{background:rgba(201,162,39,.09)}
+.hit small{display:block;color:var(--paper-dim);font:10px/1.5 var(--mono);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.chk{
+  display:flex;align-items:center;gap:9px;padding:13px 18px;font-size:12px;
+  color:var(--paper-dim);border-bottom:1px solid var(--rule);
+}
+#go{
+  justify-self:stretch;background:transparent;color:var(--brass);
+  border:0;padding:16px;font:600 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
+  cursor:pointer;transition:background .2s,color .2s;
+}
+#go:hover:not(:disabled){background:var(--brass);color:var(--ink)}
+#go:disabled{color:#5d5a55;cursor:progress}
+
+/* ---------- section headings ---------- */
+h2{
+  margin:0 0 12px;font:600 10px/1 var(--mono);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-dim);
+  display:flex;align-items:center;gap:12px;
+}
+h2::after{content:'';flex:1;height:1px;background:var(--rule)}
+
+/* ---------- evidence ---------- */
+.brief{margin-bottom:28px;animation:rise .4s var(--e) both}
+.brief pre{
+  margin:0;white-space:pre-wrap;font:12px/1.75 var(--mono);color:#b6b0a4;
+  border-left:2px solid var(--brass-dim);padding:2px 0 2px 18px;
+}
+@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+/* ---------- docket rail ---------- */
+.rail{
+  display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:20px;
+  border:1px solid var(--rule);
+}
+.chip{
+  padding:10px 16px;font:600 10px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+  color:#5d5a55;border-right:1px solid var(--rule);transition:color .3s,background .3s;
+  position:relative;
+}
+.chip.on{color:var(--ink);background:var(--brass)}
+.chip.done{color:var(--ok)}
+.chip.done::before{content:'✓ ';opacity:.7}
+.counters{
+  margin-left:auto;display:flex;gap:22px;padding:10px 18px;
+  font:11px/1 var(--mono);color:var(--paper-dim);
+}
+.counters b{color:var(--paper);font-variant-numeric:tabular-nums;font-weight:600}
+#c-phase{color:var(--brass)}
+
+/* ---------- the bench ---------- */
+/* Judge raised at the centre, advocates arrayed below - a bench, not four
+   satellites orbiting a glowing ball. */
+.stage{
+  position:relative;min-height:540px;border:1px solid var(--rule);
+  margin-bottom:28px;overflow:hidden;
+  background:
+    radial-gradient(120% 70% at 50% -10%, rgba(201,162,39,.05), transparent 60%);
+}
+.beams{position:absolute;inset:0;pointer-events:none;z-index:1}
+.beam{fill:none;stroke-width:1;opacity:.14;transition:opacity .5s var(--e)}
+.beam.hot{opacity:.85;stroke-dasharray:2 7;animation:flow 1.4s linear infinite}
+.beam.back{stroke:var(--warn)!important;opacity:.7;stroke-dasharray:2 9;animation:flowb 1.4s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-27}}
+@keyframes flowb{to{stroke-dashoffset:27}}
+
+.judge{
+  position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
+  z-index:3;text-align:center;width:210px;
+}
+.core{position:relative;width:112px;height:112px;margin:0 auto}
+/* the seal: two engraved rings, one slow rotation. no bloom, no breathing. */
+.ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--brass-dim)}
+.ring.r1{animation:spin 44s linear infinite}
+.ring.r2{inset:13px;border-style:dashed;opacity:.55;animation:spin 30s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb{
+  position:absolute;inset:26px;border-radius:50%;
+  background:var(--ink-2);border:1px solid var(--brass);
+  display:grid;place-items:center;
+  transition:box-shadow .5s var(--e),transform .5s var(--e);
+}
+.orb::after{content:'⚖';font-size:23px;color:var(--brass);opacity:.9}
+.judge.ruled .orb{
+  animation:press .55s var(--e);
+  box-shadow:0 0 0 6px rgba(201,162,39,.09),0 0 40px -6px rgba(201,162,39,.5);
+}
+@keyframes press{
+  0%{transform:scale(1)}
+  38%{transform:scale(.9)}      /* a stamp pressing down, then settling */
+  100%{transform:scale(1)}
+}
+.jname{margin-top:13px;font:600 10px/1 var(--mono);letter-spacing:.22em;color:var(--paper)}
+.jmodel{margin-top:5px;font:10px/1 var(--mono);color:#5d5a55}
+.jstate{margin-top:7px;font:11px/1.4 var(--serif);font-style:italic;color:var(--brass);min-height:16px}
+
+.adv{
+  position:absolute;width:236px;z-index:2;transform:translate(-50%,-50%);
+  background:var(--ink-2);border:1px solid var(--rule);padding:13px 15px;
+  opacity:.42;transition:opacity .45s var(--e),border-color .45s var(--e),transform .45s var(--e);
+}
+.adv.active{opacity:1;border-color:var(--lc)}
+/* Rise + settle the moment the advocate actually submits. The motion IS the
+   signal that their argument arrived. */
+.adv.done{opacity:1;border-color:var(--rule);animation:submit .5s var(--e)}
+@keyframes submit{
+  from{transform:translate(-50%,calc(-50% + 10px));opacity:.5}
+  to{transform:translate(-50%,-50%);opacity:1}
+}
+.adv-h{display:flex;align-items:baseline;gap:9px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--lc);flex:none;transform:translateY(-2px)}
+.adv.active .dot{animation:tick 1.1s ease-in-out infinite}
+@keyframes tick{0%,100%{opacity:.35}50%{opacity:1}}
+.adv-n{font:600 13px/1 var(--serif);letter-spacing:.01em}
+.adv-m{margin-left:auto;font:9.5px/1 var(--mono);color:#5d5a55}
+.stance{
+  display:inline-block;margin-top:9px;font:600 8.5px/1 var(--mono);letter-spacing:.14em;
+  color:var(--lc);border:1px solid currentColor;padding:4px 7px;opacity:.85;
+}
+/* score is measured data: mono, tabular, never dimmed */
+.score{
+  float:right;font:600 12px/1 var(--mono);font-variant-numeric:tabular-nums;
+  padding:3px 0 0;letter-spacing:.02em;
+}
+.score.hi{color:var(--ok)} .score.mid{color:var(--warn)} .score.lo{color:var(--bad)}
+.say{
+  margin-top:11px;font:13px/1.6 var(--serif);color:#c4bdb0;
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;
+}
+.defect{
+  margin-top:9px;padding-top:8px;border-top:1px solid var(--rule);
+  font:11.5px/1.5 var(--serif);font-style:italic;color:var(--warn);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.dots i{display:inline-block;width:3px;height:3px;border-radius:50%;background:var(--brass);
+  margin-right:4px;animation:bl 1.3s infinite}
+.dots i:nth-child(2){animation-delay:.18s}.dots i:nth-child(3){animation-delay:.36s}
+@keyframes bl{0%,100%{opacity:.2}50%{opacity:1}}
+
+.agree{
+  position:absolute;left:50%;bottom:16px;transform:translateX(-50%);text-align:center;z-index:3;
+  animation:rise .4s var(--e) both;
+}
+.agree span{display:block;font:600 9px/1 var(--mono);letter-spacing:.24em;color:#5d5a55}
+.agree b{display:block;margin-top:7px;font:600 17px/1 var(--mono);letter-spacing:.08em}
+
+/* ---------- the ruling ---------- */
+.ruling{border:1px solid var(--rule);animation:rise .45s var(--e) both}
+.r-top{
+  display:flex;align-items:center;gap:13px;flex-wrap:wrap;
+  padding:15px 22px;border-bottom:1px solid var(--rule);
+  background:linear-gradient(90deg,rgba(201,162,39,.07),transparent 62%);
+}
+.r-title{font:600 12px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
+.pills{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+.pill{font:10.5px/1 var(--mono);color:#5d5a55;letter-spacing:.04em}
+.pill b{color:var(--paper);font-weight:600}
+.pill.good b{color:var(--ok)} .pill.warn b{color:var(--warn)}
+/* The ruling is the one thing on screen a person must actually read. Serif,
+   generous measure, real leading - it is a judgment, not a toast notification. */
+.r-body{
+  padding:26px 22px;font:400 17px/1.72 var(--serif);max-width:74ch;color:var(--paper);
+}
+.r-body::first-letter{font-size:1.02em}
+.r-dissent{
+  margin:0 22px 22px;padding:15px 18px;border-left:2px solid var(--warn);
+  background:rgba(217,164,65,.05);font:15px/1.6 var(--serif);color:#d8c9a6;
+}
+.r-dissent b{
+  display:block;font:600 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--warn);margin-bottom:7px;
+}
+.r-write{
+  margin:0 22px 20px;padding-top:15px;border-top:1px solid var(--rule);
+  font:12px/1.6 var(--mono);color:var(--ok);
+}
+.r-write.err{color:var(--bad)}
+.r-write code{color:var(--paper-dim);word-break:break-all}
+
+.prior{border-left:2px solid var(--warn);background:rgba(217,164,65,.05);padding:20px 22px}
+.prior h3{
+  margin:0 0 10px;font:600 10px/1 var(--mono);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--warn);
+}
+.prior p{margin:0 0 12px;font:15px/1.6 var(--serif);color:#c4bdb0;max-width:70ch}
+.prior li{font:14px/1.7 var(--serif)}
+
+footer{
+  margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);
+  color:#5d5a55;font-size:12px;line-height:1.7;max-width:80ch;
+}
+footer code{font:11px var(--mono);color:var(--brass)}
+
+@media(max-width:920px){
+  .stage{min-height:1120px}
+  .adv{width:min(300px,84vw)}
+  h1{font-size:23px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tribunal — adversarial review for data decisions</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="mark">⚖</span>
+    <div>
+      <h1>Tribunal</h1>
+      <p>Adversarial review for irreversible data decisions — grounded in DataHub, written back to DataHub.</p>
+    </div>
+  </div>
+  <span class="mode" id="mode">connecting…</span>
+</header>
+
+<div id="notice" class="notice" hidden></div>
+
+<section class="ask">
+  <div class="ask-row">
+    <input id="asset" placeholder="Asset in DataHub, e.g. orders" autocomplete="off">
+    <div class="hits" id="hits" hidden></div>
+  </div>
+  <input id="question" placeholder="The decision to put to the panel, e.g. should we deprecate this table?" autocomplete="off">
+  <label class="chk"><input type="checkbox" id="write" checked> write the ruling back to DataHub</label>
+  <button id="go">Convene the tribunal</button>
+</section>
+
+<!-- The briefing is shown BEFORE the argument on purpose: a judge should be able to
+     see exactly which DataHub facts the panel was given, and check the reasoning
+     against them. A verdict whose inputs are hidden is just an opinion. -->
+<section class="brief" id="brief" hidden>
+  <h2>What DataHub told the panel</h2>
+  <pre id="brief-body"></pre>
+</section>
+
+<section class="rail" id="rail" hidden>
+  <span class="chip" id="r0">R0 · argue in isolation</span>
+  <span class="chip" id="r1">R1 · judge scores</span>
+  <span class="chip" id="r2">R2 · refine</span>
+  <span class="counters">
+    <span>calls <b id="c-calls">0</b></span>
+    <span>tokens <b id="c-tok">0</b></span>
+    <span id="c-phase">idle</span>
+  </span>
+</section>
+
+<section class="stage" id="stage" hidden>
+  <svg class="beams" id="beams" viewBox="0 0 1000 520" preserveAspectRatio="none"></svg>
+  <div class="judge" id="judge">
+    <div class="core"><i class="ring r1"></i><i class="ring r2"></i><i class="orb"></i></div>
+    <div class="jname">JUDGE</div>
+    <div class="jmodel">mistral-medium</div>
+    <div class="jstate" id="jstate">waiting</div>
+  </div>
+  <div class="agree" id="agree" hidden><span>AGREEMENT</span><b id="agree-v">—</b></div>
+</section>
+
+<section class="ruling" id="ruling" hidden></section>
+
+<footer>
+  <span>Read → deliberate → write back. The ruling becomes a native DataHub <code>Decision</code> document linked to the asset, so the next person or agent inherits the reasoning, not just the outcome.</span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

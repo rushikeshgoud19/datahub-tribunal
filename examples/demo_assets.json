@@ -1,0 +1,72 @@
+[
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:dbt,b2fd91.order_entry_db.order_entry.orders,PROD)",
+  "name": "orders",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:s3,b2fd91.demo-data-bucket/order_entry/orders,PROD)",
+  "name": "orders",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,b2fd91.order_entry_db.order_entry.orders,PROD)",
+  "name": "ORDERS",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,b2fd91.order_entry_db.order_entry.orders,PROD)",
+  "name": "orders",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,b2fd91.order_entry_db.order_entry.order_items,PROD)",
+  "name": "ORDER_ITEMS",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:dbt,b2fd91.order_entry_db.order_entry.order_items,PROD)",
+  "name": "order_items",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:s3,b2fd91.demo-data-bucket/order_entry/order_items,PROD)",
+  "name": "order_items",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,b2fd91.order_entry_db.order_entry.order_items,PROD)",
+  "name": "order_items",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,b2fd91.order_entry_db.order_entry.customers,PROD)",
+  "name": "CUSTOMERS",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:dbt,b2fd91.order_entry_db.order_entry.customers,PROD)",
+  "name": "customers",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:s3,b2fd91.demo-data-bucket/order_entry/customers,PROD)",
+  "name": "customers",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,b2fd91.order_entry_db.order_entry.customers,PROD)",
+  "name": "customers",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,b2fd91.order_entry_db.order_entry.products,PROD)",
+  "name": "PRODUCTS",
+  "type": "DATASET"
+ },
+ {
+  "urn": "urn:li:dataset:(urn:li:dataPlatform:dbt,b2fd91.order_entry_db.order_entry.products,PROD)",
+  "name": "products",
+  "type": "DATASET"
+ }
+]

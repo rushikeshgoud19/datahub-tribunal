@@ -1,0 +1,16 @@
+[project]
+name = "tribunal"
+version = "0.1.0"
+description = "Adversarial review for irreversible data decisions, grounded in and written back to DataHub."
+requires-python = ">=3.10"
+dependencies = ["datahub-agent-context"]
+
+[project.scripts]
+tribunal = "tribunal.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
