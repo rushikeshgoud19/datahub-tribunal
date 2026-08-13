@@ -1,6 +1,20 @@
+<div align="center">
+
 # Tribunal
 
 **Adversarial review for irreversible data decisions — grounded in DataHub, written back to DataHub.**
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![DataHub](https://img.shields.io/badge/DataHub-Agent%20Context%20Kit-1890FF)
+![Dependencies](https://img.shields.io/badge/dependencies-one-brightgreen)
+![Build](https://img.shields.io/badge/build%20step-none-brightgreen)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue)
+
+*One model answering confidently is the failure mode, not the feature.*
+
+</div>
+
+---
 
 Someone asks *"can we deprecate `fct_orders`?"* in Slack. Three people weigh in, one of them
 is confident, the table gets dropped. Six weeks later a dashboard breaks and nobody can
@@ -11,6 +25,10 @@ isolation on **different models**, each under a different stance. A held-out jud
 and names the specific defect in each. Then the ruling **and the argument behind it** are
 written back into DataHub as a native `Decision` document linked to the asset, so the next
 person — or the next agent — inherits the reasoning, not just the outcome.
+
+The decision is **not** made by the model that sounds most sure. It is made by code, applying
+a threshold to scores the judge produced — for a reason measured, not assumed. See
+[the judge scores; code decides](#the-judge-scores-code-decides).
 
 Built for **[Build with DataHub: The Agent Hackathon](https://datahub.devpost.com/)**,
 Challenge 1 — *Agents That Do Real Work*.
@@ -133,10 +151,10 @@ Things that cost us time, measured against DataHub `v1.5.0.6` quickstart:
 
 Per the hackathon rules, disclosing prior work:
 
-The deliberation engine in `src/tribunal/panel.py` is **adapted from an "Agent Orchestra"
-module the author wrote for a personal assistant project before this hackathon**. What carried
-over is the general shape: parallel advocates, a scoring judge, a code-owned adopt/refine
-threshold, and the Mistral key-pool that parks a key on HTTP 429.
+The deliberation engine in `src/tribunal/panel.py` is **adapted from an agent-deliberation
+module the author wrote before this hackathon**. What carried over is the general shape:
+parallel advocates, a scoring judge, a code-owned adopt/refine threshold, and the Mistral
+key-pool that parks a key on HTTP 429.
 
 Everything that makes this a DataHub project was written during the submission window:
 `datahub_context.py` (read / recall / write-back), the four data-specific stances, the
@@ -148,6 +166,13 @@ No other pre-existing code is included. Dependencies are `datahub-agent-context`
 Python standard library — the web console deliberately has no framework and no build step.
 
 ---
+
+## Related work
+
+**[stepproof](https://github.com/rushikeshgoud19/stepproof)** — the same instinct pointed at a
+different problem. Tribunal distrusts what one model says is *true*. `stepproof` distrusts what
+an agent says it *did*: it checks the claimed effect against real state and seals it into a
+hash-chained ledger. Zero dependencies.
 
 ## Licence
 
